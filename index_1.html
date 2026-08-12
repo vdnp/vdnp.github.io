@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yiğit Enes Kaya — Full-stack geliştirici</title>
+<meta name="description" content="Karmaşık operasyonları sade yazılıma çeviren full-stack geliştirici. Django, .NET, Next.js, React Native.">
+<meta property="og:title" content="Yiğit Enes Kaya — Full-stack geliştirici">
+<meta property="og:description" content="Üretim, kalite ve saha operasyonları için uçtan uca sistemler kuruyorum.">
+<meta name="theme-color" content="#0A0E1A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Manrope:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0E1A;
+  --bg-2:#0F1526;
+  --glass:rgba(255,255,255,.04);
+  --glass-2:rgba(255,255,255,.07);
+  --edge:rgba(255,255,255,.09);
+  --edge-hi:rgba(255,255,255,.18);
+
+  --ink:#EEF2FC;
+  --ink-2:#A9B4D0;
+  --ink-3:#6B769A;
+
+  --iris:#7C8CFF;
+  --violet:#B47BFF;
+  --mint:#4FE0A6;
+  --apricot:#FFB068;
+  --rose:#FF7A93;
+
+  --display:'Outfit',system-ui,sans-serif;
+  --body:'Manrope',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+
+  --rail:96px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--body);font-size:16px;line-height:1.65;
+  -webkit-font-smoothing:antialiased;overflow:hidden;
+}
+a{color:inherit}
+
+/* ---------- ambience ---------- */
+.aura{position:fixed;inset:0;pointer-events:none;z-index:0}
+.aura i{position:absolute;display:block;border-radius:50%;filter:blur(100px);opacity:.55}
+.a1{width:640px;height:640px;top:-280px;left:-180px;background:radial-gradient(circle,rgba(124,140,255,.55),transparent 68%)}
+.a2{width:560px;height:560px;bottom:-260px;right:-180px;background:radial-gradient(circle,rgba(180,123,255,.45),transparent 68%)}
+.a3{width:520px;height:520px;top:40%;left:45%;background:radial-gradient(circle,rgba(79,224,166,.2),transparent 70%)}
+.grid-bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:68px 68px;
+  mask-image:radial-gradient(ellipse 80% 70% at 50% 45%,#000 15%,transparent 80%);
+}
+
+/* ---------- fixed chrome ---------- */
+.logo{
+  position:fixed;top:26px;left:34px;z-index:30;
+  font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:-.01em;
+  text-decoration:none;display:flex;align-items:center;gap:9px;
+}
+.logo b{color:var(--mint);font-family:var(--mono);font-size:12px;font-weight:500}
+
+.side{position:fixed;bottom:0;z-index:30;display:flex;flex-direction:column;align-items:center;gap:20px}
+.side::after{content:"";width:1px;height:88px;background:linear-gradient(180deg,var(--edge-hi),transparent)}
+.side-l{left:34px}
+.side-r{right:34px}
+.side-l a{color:var(--ink-2);display:grid;place-items:center;transition:color .22s,transform .22s}
+.side-l a:hover,.side-l a:focus-visible{color:var(--mint);transform:translateY(-3px)}
+.side-l svg{width:19px;height:19px;display:block}
+.side-r a{
+  writing-mode:vertical-rl;font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;
+  text-decoration:none;color:var(--ink-2);transition:color .22s,transform .22s;
+}
+.side-r a:hover,.side-r a:focus-visible{color:var(--mint);transform:translateY(-3px)}
+
+/* arrows */
+.arrow{
+  position:fixed;top:50%;transform:translateY(-50%);z-index:30;
+  width:46px;height:46px;border-radius:50%;
+  background:var(--glass);border:1px solid var(--edge);color:var(--ink-2);
+  display:grid;place-items:center;cursor:pointer;
+  backdrop-filter:blur(10px);
+  transition:background .22s,border-color .22s,color .22s,opacity .22s;
+}
+.arrow:hover:not(:disabled){background:var(--glass-2);border-color:var(--edge-hi);color:var(--ink)}
+.arrow:disabled{opacity:.22;cursor:default}
+.arrow.prev{left:26px}
+.arrow.next{right:26px}
+.arrow svg{width:17px;height:17px}
+
+/* pager */
+.pager{
+  position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:30;
+  display:flex;align-items:center;gap:14px;
+  background:rgba(10,14,26,.6);backdrop-filter:blur(12px);
+  border:1px solid var(--edge);border-radius:100px;padding:8px 16px;
+}
+.pager .idx{font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.1em}
+.pager .idx b{color:var(--ink);font-weight:500}
+.dots{display:flex;gap:7px}
+.dots button{
+  width:7px;height:7px;padding:0;border-radius:50%;cursor:pointer;
+  border:0;background:rgba(255,255,255,.2);transition:background .25s,width .25s;
+}
+.dots button[aria-current="true"]{background:var(--mint);width:22px;border-radius:100px}
+
+/* ---------- deck ---------- */
+.deck{
+  position:relative;z-index:10;
+  display:flex;height:100dvh;
+  overflow-x:auto;overflow-y:hidden;
+  scroll-snap-type:x mandatory;
+  scrollbar-width:none;
+}
+.deck::-webkit-scrollbar{display:none}
+.panel{
+  flex:0 0 100vw;height:100dvh;
+  scroll-snap-align:start;
+  overflow-y:auto;scrollbar-width:none;
+  padding:88px var(--rail) 96px;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.panel::-webkit-scrollbar{display:none}
+.inner{width:100%;max-width:1080px;margin:0 auto}
+
+/* section heading */
+.h-sec{display:flex;align-items:center;gap:16px;margin-bottom:34px}
+.h-sec .no{font-family:var(--mono);font-size:14px;color:var(--mint)}
+.h-sec h2{font-family:var(--display);font-weight:700;font-size:clamp(24px,3.4vw,34px);letter-spacing:-.03em;margin:0;white-space:nowrap}
+.h-sec .rule{flex:1;height:1px;background:linear-gradient(90deg,var(--edge-hi),transparent);max-width:280px}
+
+/* ---------- hero ---------- */
+.badge{
+  display:inline-flex;align-items:center;gap:9px;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--mint);background:rgba(79,224,166,.09);
+  border:1px solid rgba(79,224,166,.24);padding:6px 13px;border-radius:100px;margin-bottom:26px;
+}
+.pulse{width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 0 rgba(79,224,166,.55);animation:pulse 2.4s ease-out infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(79,224,166,0)}100%{box-shadow:0 0 0 0 rgba(79,224,166,0)}}
+
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);margin:0 0 18px}
+.hero h1{
+  font-family:var(--display);font-weight:800;
+  font-size:clamp(38px,6.2vw,74px);line-height:1.03;letter-spacing:-.035em;
+  margin:0 0 24px;max-width:16ch;
+}
+.grad{background:linear-gradient(100deg,var(--iris),var(--violet) 48%,var(--mint));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lede{font-size:18px;line-height:1.6;max-width:56ch;color:var(--ink-2);margin:0 0 30px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:36px}
+.chip{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;padding:7px 13px;border-radius:100px;border:1px solid var(--edge);background:var(--glass);color:var(--ink-2)}
+
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:12.5px;text-decoration:none;cursor:pointer;
+  padding:13px 22px;border-radius:100px;border:1px solid var(--edge-hi);
+  background:transparent;color:var(--ink);
+  transition:background .22s,border-color .22s,transform .22s;
+}
+.btn:hover,.btn:focus-visible{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.32);transform:translateY(-2px)}
+.btn.primary{background:var(--ink);color:#0A0E1A;border-color:transparent;font-weight:500}
+.btn.primary:hover{background:#fff}
+.btn svg{width:14px;height:14px}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px}
+
+/* ---------- project cards ---------- */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{
+  position:relative;display:flex;flex-direction:column;
+  background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+  border:1px solid var(--edge);border-radius:20px;padding:24px 22px 20px;
+  backdrop-filter:blur(14px);
+  transition:transform .28s,border-color .28s;
+}
+.card::before{
+  content:"";position:absolute;inset:0;border-radius:20px;padding:1px;
+  background:linear-gradient(150deg,var(--accent,var(--iris)),transparent 45%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  opacity:0;transition:opacity .3s;pointer-events:none;
+}
+.card:hover{transform:translateY(-5px);border-color:var(--edge-hi)}
+.card:hover::before{opacity:.9}
+.c1{--accent:var(--mint)} .c2{--accent:var(--iris)} .c3{--accent:var(--violet)}
+
+.card-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.card h3{font-family:var(--display);font-weight:700;font-size:21px;letter-spacing:-.025em;margin:0}
+.state{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:4px 9px;border-radius:100px;border:1px solid;white-space:nowrap}
+.s-live{color:var(--mint);border-color:rgba(79,224,166,.35);background:rgba(79,224,166,.08)}
+.s-wip{color:var(--apricot);border-color:rgba(255,176,104,.35);background:rgba(255,176,104,.08)}
+.kind{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);margin:0 0 14px;line-height:1.5}
+.card p.desc{font-size:14.5px;color:var(--ink-2);margin:0 0 18px;line-height:1.6}
+.card p.desc b{color:var(--ink);font-weight:600}
+.stack{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 20px}
+.stack span{font-family:var(--mono);font-size:9.5px;color:var(--ink-2);padding:4px 9px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.06)}
+
+.flow-cap{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin:auto 0 10px}
+.flow{list-style:none;display:flex;margin:0;padding:0;gap:4px}
+.flow li{flex:1;position:relative;height:3px;border-radius:3px;background:rgba(255,255,255,.1)}
+.flow li.on{background:var(--mint);box-shadow:0 0 8px rgba(79,224,166,.4)}
+.flow li.now{background:var(--apricot);box-shadow:0 0 8px rgba(255,176,104,.5)}
+.flow li[data-t]::after{
+  content:attr(data-t);position:absolute;bottom:10px;left:0;
+  font-family:var(--mono);font-size:8.5px;color:var(--ink-3);white-space:nowrap;
+  opacity:0;transition:opacity .2s;
+}
+.card:hover .flow li[data-t]::after{opacity:1}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:9px;color:var(--ink-3);margin-top:12px}
+.key{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.k1{background:var(--mint)} .k2{background:var(--apricot)} .k3{background:rgba(255,255,255,.16)}
+
+/* ---------- skills ---------- */
+.grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.cell{background:var(--glass);border:1px solid var(--edge);border-radius:16px;padding:20px 22px;transition:border-color .25s,background .25s,transform .25s}
+.cell:hover{border-color:var(--edge-hi);background:var(--glass-2);transform:translateY(-3px)}
+.cell h4{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;margin:0 0 12px;font-weight:500}
+.cell:nth-child(1) h4{color:var(--iris)} .cell:nth-child(2) h4{color:var(--violet)}
+.cell:nth-child(3) h4{color:var(--mint)} .cell:nth-child(4) h4{color:var(--apricot)}
+.cell:nth-child(5) h4{color:var(--rose)} .cell:nth-child(6) h4{color:var(--iris)}
+.cell ul{margin:0;padding:0;list-style:none}
+.cell li{font-size:13.5px;padding:3px 0;color:var(--ink-2)}
+
+/* ---------- rules ---------- */
+.rules{margin:0;padding:0;list-style:none;counter-reset:r;display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.rules li{counter-increment:r;display:grid;grid-template-columns:38px 1fr;gap:14px;padding:18px 20px;border-radius:16px;border:1px solid var(--edge);background:var(--glass);transition:border-color .25s,transform .25s}
+.rules li:hover{border-color:var(--edge-hi);transform:translateY(-3px)}
+.rules li::before{content:counter(r,decimal-leading-zero);font-family:var(--mono);font-size:12px;color:var(--iris);padding-top:3px}
+.rules h4{font-family:var(--display);font-weight:600;font-size:16px;margin:0 0 5px;letter-spacing:-.01em}
+.rules p{margin:0;color:var(--ink-2);font-size:13.5px;line-height:1.6}
+
+/* ---------- repos ---------- */
+.repos{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.repo{display:block;text-decoration:none;border-radius:16px;border:1px solid var(--edge);background:var(--glass);padding:20px;transition:border-color .25s,transform .25s,background .25s}
+.repo:hover,.repo:focus-visible{border-color:rgba(124,140,255,.45);transform:translateY(-4px);background:var(--glass-2)}
+.repo b{font-family:var(--mono);font-size:12.5px;font-weight:500;display:block;margin-bottom:8px;color:var(--iris)}
+.repo small{font-size:13px;color:var(--ink-2);display:block;line-height:1.55}
+.repo .go{font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-top:14px;display:block}
+
+/* ---------- contact ---------- */
+.contact-box{
+  padding:44px 44px;border-radius:24px;
+  background:linear-gradient(140deg,rgba(124,140,255,.18),rgba(180,123,255,.1) 50%,rgba(79,224,166,.08));
+  border:1px solid var(--edge);
+}
+.contact-box h2{font-family:var(--display);font-weight:800;font-size:clamp(28px,4.2vw,48px);letter-spacing:-.032em;margin:0 0 16px;line-height:1.08;max-width:16ch}
+.contact-box p{color:var(--ink-2);max-width:50ch;margin:0 0 30px}
+
+/* ---------- reveal ---------- */
+.panel .rv{opacity:0;transform:translateY(18px);transition:opacity .55s cubic-bezier(.22,1,.36,1),transform .55s cubic-bezier(.22,1,.36,1)}
+.panel.live .rv{opacity:1;transform:none}
+.panel.live .rv:nth-child(2){transition-delay:.06s}
+.panel.live .rv:nth-child(3){transition-delay:.12s}
+.panel.live .rv:nth-child(4){transition-delay:.18s}
+
+:focus-visible{outline:2px solid var(--mint);outline-offset:3px}
+
+/* ---------- responsive ---------- */
+@media (max-width:1080px){
+  .cards{grid-template-columns:1fr;gap:12px}
+  .card{padding:18px}
+  .card p.desc{margin-bottom:14px}
+  .grid6{grid-template-columns:repeat(2,1fr)}
+  .repos{grid-template-columns:repeat(2,1fr)}
+  .rules{grid-template-columns:1fr}
+}
+@media (max-width:820px){
+  :root{--rail:24px}
+  body{font-size:15px}
+  .side,.arrow.prev,.arrow.next{display:none}
+  .logo{top:18px;left:24px}
+  .panel{padding:76px 24px 92px;justify-content:flex-start}
+  .inner{padding-top:8px}
+  .grid6{grid-template-columns:1fr}
+  .repos{grid-template-columns:1fr}
+  .contact-box{padding:28px 22px}
+  .pager{bottom:18px}
+  .card .flow-cap{margin-top:4px}
+}
+@media (prefers-reduced-motion:reduce){
+  .panel .rv{opacity:1;transform:none;transition:none}
+  .card:hover,.repo:hover,.cell:hover,.rules li:hover,.btn:hover{transform:none}
+  .pulse{animation:none}
+  .deck{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="aura"><i class="a1"></i><i class="a2"></i><i class="a3"></i></div>
+
+<a class="logo" href="#p0" data-go="0">Yiğit Enes Kaya <b>/ vdnp</b></a>
+
+<!-- sol ikon rayı -->
+<div class="side side-l">
+  <a href="https://github.com/vdnp" target="_blank" rel="noopener" aria-label="GitHub">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.8 2.7 1.3 3.4 1 .1-.7.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0C17.1 4.6 18.1 5 18.1 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+  </a>
+  <a href="https://www.linkedin.com/in/yiğit-enes-kaaya/" target="_blank" rel="noopener" aria-label="LinkedIn">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.1c.5-1 1.8-2 3.7-2 4 0 4.7 2.5 4.7 5.8V21h-4v-5.6c0-1.3 0-3-1.9-3s-2.2 1.4-2.2 2.9V21H9z"/></svg>
+  </a>
+  <a href="mailto:eneskaaya3@gmail.com" aria-label="E-posta">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 6.5 9 6.5 9-6.5"/></svg>
+  </a>
+</div>
+
+<!-- sağ e-posta rayı -->
+<div class="side side-r">
+  <a href="mailto:eneskaaya3@gmail.com">eneskaaya3@gmail.com</a>
+</div>
+
+<button class="arrow prev" id="prev" aria-label="Önceki bölüm">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 8 12l7 7"/></svg>
+</button>
+<button class="arrow next" id="next" aria-label="Sonraki bölüm">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
+</button>
+
+<nav class="pager" aria-label="Bölümler">
+  <span class="idx"><b id="cur">01</b> / 06</span>
+  <div class="dots" id="dots"></div>
+</nav>
+
+<div class="deck" id="deck">
+
+  <!-- 01 ------------------------------------------------ -->
+  <section class="panel" id="p0" data-label="Merhaba">
+    <div class="inner hero">
+      <div class="rv"><span class="badge"><span class="pulse"></span>Yeni işlere açık</span></div>
+      <div class="rv">
+        <p class="eyebrow">Yiğit Enes Kaya · Full-stack geliştirici · İzmir</p>
+        <h1>Karmaşık işleyişi <span class="grad">sade yazılıma</span> çeviriyorum.</h1>
+      </div>
+      <div class="rv">
+        <p class="lede">
+          Bir implantın hangi hammadde partisinden çıktığı, bir aracın hangi ustada olduğu,
+          bir işin kim tarafından onaylandığı — kâğıtta kaybolan bu bilgileri izlenebilir
+          sistemlere taşıyorum. Veritabanından telefona kadar tek elden.
+        </p>
+        <div class="chips">
+          <span class="chip">Django</span><span class="chip">.NET</span>
+          <span class="chip">Next.js</span><span class="chip">React Native</span>
+          <span class="chip">PostgreSQL</span>
+        </div>
+      </div>
+      <div class="rv cta-row">
+        <button class="btn primary" data-go="1">
+          Projelere göz at
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <a class="btn" href="mailto:eneskaaya3@gmail.com">İletişime geç</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 ------------------------------------------------ -->
+  <section class="panel" id="p1" data-label="Sistemler">
+    <div class="inner">
+      <div class="h-sec rv">
+        <span class="no">01.</span><h2>Geliştirdiğim sistemler</h2><span class="rule"></span>
+      </div>
+
+      <div class="cards rv">
+        <article class="card c1">
+          <div class="card-h"><h3>MedtimStock</h3><span class="state s-live">Aktif</span></div>
+          <p class="kind">Lot bazlı stok &amp; kalite yönetimi<br>Medikal implant üreticisi için</p>
+          <p class="desc">
+            Mal kabulden sevkiyata kadar her partinin izini süren kalite sistemi.
+            <b>Hangi ürünün hangi hammadde lotundan çıktığı</b> ayrı bir tabloda tutulmadan
+            tüketim kayıtlarından türetiliyor. Kalite reddi, zayiat hareketini ve maliyetini
+            kendiliğinden oluşturuyor.
+          </p>
+          <div class="stack">
+            <span>Django</span><span>DRF</span><span>PostgreSQL</span><span>Celery</span>
+            <span>Next.js</span><span>TypeScript</span><span>Docker</span>
+          </div>
+          <p class="flow-cap">Kapsanan süreç</p>
+          <ol class="flow">
+            <li class="on" data-t="Mal kabul"></li><li class="on"></li><li class="on"></li>
+            <li class="on"></li><li class="on"></li><li data-t="Sterilizasyon"></li><li class="on"></li>
+          </ol>
+          <div class="legend"><span><i class="key k1"></i>Kuruldu</span><span><i class="key k3"></i>Bekliyor</span></div>
+        </article>
+
+        <article class="card c2">
+          <div class="card-h"><h3>Filo Yönetim</h3><span class="state s-wip">Geliştiriliyor</span></div>
+          <p class="kind">Araç, servis ve iş emri yönetimi<br>.NET API + web panel</p>
+          <p class="desc">
+            Araç talebinden servis kapanışına kadar akışı yöneten yönetim paneli ve API'si.
+            Her anlamlı değişiklik <b>aktivite kaydına</b> düşüyor, panelde renk kodlu akış
+            olarak görünüyor. Tüm oluştur/düzenle ekranları tek bir form soyutlamasını paylaşıyor.
+          </p>
+          <div class="stack">
+            <span>.NET 8</span><span>EF Core</span><span>JWT</span>
+            <span>Next.js</span><span>React 19</span><span>zod</span>
+          </div>
+          <p class="flow-cap">Kapsanan süreç</p>
+          <ol class="flow">
+            <li class="on" data-t="Talep"></li><li class="on"></li>
+            <li class="now" data-t="İş emri"></li><li class="on"></li><li class="on"></li><li></li>
+          </ol>
+          <div class="legend"><span><i class="key k1"></i>Çalışıyor</span><span><i class="key k2"></i>Üzerinde</span><span><i class="key k3"></i>Sırada</span></div>
+        </article>
+
+        <article class="card c3">
+          <div class="card-h"><h3>Saha uygulaması</h3><span class="state s-wip">Geliştiriliyor</span></div>
+          <p class="kind">Filo sisteminin mobil istemcisi<br>Rol bazlı, QR ile iş emri</p>
+          <p class="desc">
+            Aynı backend'in telefondaki yüzü. Uygulama girişte <b>role göre iki ayrı uygulamaya
+            dönüşüyor</b>: usta QR okutup iş emrinin maddelerini onaylıyor, müdür özet, talep ve
+            araç ekranlarını görüyor.
+          </p>
+          <div class="stack">
+            <span>React Native</span><span>Expo</span><span>React Query</span>
+            <span>expo-camera</span><span>SecureStore</span>
+          </div>
+          <p class="flow-cap">Usta akışı</p>
+          <ol class="flow">
+            <li class="on" data-t="Giriş"></li><li class="on"></li><li class="on"></li>
+            <li class="on"></li><li class="now" data-t="Onay"></li>
+          </ol>
+          <div class="legend"><span><i class="key k1"></i>Çalışıyor</span><span><i class="key k2"></i>Servis bekliyor</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 ------------------------------------------------ -->
+  <section class="panel" id="p2" data-label="Yetenekler">
+    <div class="inner">
+      <div class="h-sec rv"><span class="no">02.</span><h2>Yetenekler</h2><span class="rule"></span></div>
+      <div class="grid6 rv">
+        <div class="cell"><h4>Backend</h4><ul>
+          <li>Python · Django · DRF</li><li>C# · ASP.NET Core · EF Core</li>
+          <li>REST API tasarımı</li><li>Celery · Redis</li></ul></div>
+        <div class="cell"><h4>Frontend</h4><ul>
+          <li>Next.js (App Router) · React</li><li>TypeScript (strict)</li>
+          <li>Tailwind · tasarım sistemi</li><li>react-hook-form · zod</li></ul></div>
+        <div class="cell"><h4>Mobil</h4><ul>
+          <li>React Native · Expo</li><li>React Query</li>
+          <li>Kamera / QR akışları</li><li>Güvenli token saklama</li></ul></div>
+        <div class="cell"><h4>Veri</h4><ul>
+          <li>PostgreSQL · SQLite</li><li>Şema ve migration tasarımı</li>
+          <li>Sorgu performansı</li><li>Denetim kaydı</li></ul></div>
+        <div class="cell"><h4>Altyapı</h4><ul>
+          <li>Docker · Compose</li><li>GitHub Actions (CI)</li>
+          <li>S3 uyumlu depolama</li><li>JWT kimlik doğrulama</li></ul></div>
+        <div class="cell"><h4>Kalite</h4><ul>
+          <li>pytest · pytest-django</li><li>Playwright (uçtan uca)</li>
+          <li>Kod incelemesi · PR akışı</li><li>Git · Postman · Figma</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 ------------------------------------------------ -->
+  <section class="panel" id="p3" data-label="Çalışma biçimi">
+    <div class="inner">
+      <div class="h-sec rv"><span class="no">03.</span><h2>Çalışma biçimim</h2><span class="rule"></span></div>
+      <ol class="rules rv">
+        <li><div><h4>Türetilebilen veri saklanmaz</h4>
+          <p>Soy ağacı, kâr/zarar, stok değeri — hepsi mevcut kayıtlardan hesaplanır. Üçüncü bir tablo, tutarsızlık için üçüncü bir fırsattır.</p></div></li>
+        <li><div><h4>Kural yorumda değil, kodda dursun</h4>
+          <p>Bir geçiş yasaksa çalışma zamanında hata versin. Kod incelemesine güvenen kural er ya da geç ihlal edilir.</p></div></li>
+        <li><div><h4>Bağımlılık yönü tek taraflı</h4>
+          <p>Modüller birbirini çağırmak yerine sinyalle haberleşir. Çekirdek modül, kendisine bağlı olanların varlığından habersiz kalır.</p></div></li>
+        <li><div><h4>Geçmiş silinmez</h4>
+          <p>Kayıtlar pasife alınır, silinmez. Denetlenebilirlik sadeleştirme uğruna feda edilmez.</p></div></li>
+        <li><div><h4>Yeni paket, son çare</h4>
+          <p>Önce mevcut çözüme bakılır. Denenip işe yaramayan her paket, neden kaldırıldığı yazılarak kaldırılır.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 05 ------------------------------------------------ -->
+  <section class="panel" id="p4" data-label="Açık kaynak">
+    <div class="inner">
+      <div class="h-sec rv"><span class="no">04.</span><h2>Açık kaynak</h2><span class="rule"></span></div>
+      <div class="repos rv">
+        <a class="repo" href="https://github.com/vdnp/use-zod-params" target="_blank" rel="noopener">
+          <b>use-zod-params</b><small>URL parametrelerini zod şemasıyla tipli okuma.</small><span class="go">TypeScript →</span></a>
+        <a class="repo" href="https://github.com/vdnp/image-turbo" target="_blank" rel="noopener">
+          <b>image-turbo</b><small>Görsel işleme ve optimizasyon yardımcıları.</small><span class="go">TypeScript →</span></a>
+        <a class="repo" href="https://github.com/vdnp/tablekit" target="_blank" rel="noopener">
+          <b>tablekit</b><small>React tablo bileşenleri ve tema köprüsü.</small><span class="go">TypeScript →</span></a>
+        <a class="repo" href="https://github.com/vdnp/Library-Managment" target="_blank" rel="noopener">
+          <b>Library-Managment</b><small>Kütüphane yönetimi uygulaması.</small><span class="go">JavaScript →</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 ------------------------------------------------ -->
+  <section class="panel" id="p5" data-label="İletişim">
+    <div class="inner">
+      <div class="h-sec rv"><span class="no">05.</span><h2>İletişim</h2><span class="rule"></span></div>
+      <div class="contact-box rv">
+        <h2>Bir sistem kurulacaksa konuşalım.</h2>
+        <p>Üretim, kalite, saha operasyonu — süreci anlatın, nereden dijitalleşeceğini birlikte çıkaralım.</p>
+        <div class="cta-row">
+          <a class="btn primary" href="mailto:eneskaaya3@gmail.com">eneskaaya3@gmail.com</a>
+          <a class="btn" href="https://github.com/vdnp" target="_blank" rel="noopener">GitHub</a>
+          <a class="btn" href="https://www.linkedin.com/in/yiğit-enes-kaaya/" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  var deck = document.getElementById('deck');
+  var panels = Array.prototype.slice.call(deck.querySelectorAll('.panel'));
+  var prev = document.getElementById('prev');
+  var next = document.getElementById('next');
+  var cur = document.getElementById('cur');
+  var dotsWrap = document.getElementById('dots');
+  var i = 0;
+
+  panels.forEach(function (p, n) {
+    var b = document.createElement('button');
+    b.setAttribute('aria-label', p.dataset.label);
+    b.title = p.dataset.label;
+    b.addEventListener('click', function () { go(n); });
+    dotsWrap.appendChild(b);
+  });
+  var dots = Array.prototype.slice.call(dotsWrap.children);
+
+  function go(n) {
+    i = Math.max(0, Math.min(panels.length - 1, n));
+    deck.scrollTo({ left: panels[i].offsetLeft, behavior: 'smooth' });
+    sync();
+  }
+  function sync() {
+    cur.textContent = String(i + 1).padStart(2, '0');
+    dots.forEach(function (d, n) { d.setAttribute('aria-current', n === i ? 'true' : 'false'); });
+    prev.disabled = i === 0;
+    next.disabled = i === panels.length - 1;
+    panels.forEach(function (p, n) { p.classList.toggle('live', n === i); });
+  }
+
+  prev.addEventListener('click', function () { go(i - 1); });
+  next.addEventListener('click', function () { go(i + 1); });
+
+  document.querySelectorAll('[data-go]').forEach(function (el) {
+    el.addEventListener('click', function (e) { e.preventDefault(); go(parseInt(el.dataset.go, 10)); });
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight') { go(i + 1); }
+    else if (e.key === 'ArrowLeft') { go(i - 1); }
+    else if (e.key === 'Home') { go(0); }
+    else if (e.key === 'End') { go(panels.length - 1); }
+  });
+
+  // dikey tekerlek → yatay geçiş (yavaşlatmalı)
+  var lock = false;
+  deck.addEventListener('wheel', function (e) {
+    if (Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
+    var panel = panels[i];
+    var scrollable = panel.scrollHeight > panel.clientHeight + 4;
+    if (scrollable) {
+      var atTop = panel.scrollTop <= 0;
+      var atEnd = panel.scrollTop + panel.clientHeight >= panel.scrollHeight - 2;
+      if (!(atEnd && e.deltaY > 0) && !(atTop && e.deltaY < 0)) return;
+    }
+    e.preventDefault();
+    if (lock || Math.abs(e.deltaY) < 12) return;
+    lock = true;
+    go(e.deltaY > 0 ? i + 1 : i - 1);
+    setTimeout(function () { lock = false; }, 700);
+  }, { passive: false });
+
+  // kaydırma/dokunmayla değişimi yakala
+  var t;
+  deck.addEventListener('scroll', function () {
+    clearTimeout(t);
+    t = setTimeout(function () {
+      var n = Math.round(deck.scrollLeft / deck.clientWidth);
+      if (n !== i) { i = n; sync(); }
+    }, 90);
+  }, { passive: true });
+
+  window.addEventListener('resize', function () { deck.scrollLeft = panels[i].offsetLeft; });
+
+  sync();
+})();
+</script>
+</body>
+</html>
